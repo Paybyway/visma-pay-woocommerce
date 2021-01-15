@@ -1,0 +1,9 @@
+<wpml-config>
+	<admin-texts>
+		<key name="woocommerce_visma_pay_settings">
+			<key name="visma_pay_description" />
+			<key name="visma_pay_payment_description" />
+			<key name="title" />
+		</key>
+	</admin-texts> 
+</wpml-config>
