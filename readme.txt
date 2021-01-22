@@ -18,10 +18,6 @@ Visma Pay plugin allows you to accept e-payments through most Finnish banks, cre
 
 This is a plugin for integrating Visma Pay payment gateway with your Woocommerce store. Accept payments with this plugin, you need to have an active contract with [Visma Pay](https://www.visma.fi/vismapay/). You can order Visma Pay [here](https://www.visma.fi/vismapay/tilaa-visma-pay/) (See [terms](https://static.vismapay.com/yleiset-ehdot.pdf)).
 
-= Supported features =
-* Accept payments securely
-* Optional separate authorize and capture(settle) for credit card payments 
-
 = Supported payment methods =
 Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, Handelsbanken, S-Pankki, Ålandsbanken, Oma Säästöpankki, Visa, Visa Electron, Mastercard, Jousto, Mash, MobilePay, Masterpass, Pivo and Siirto.
 

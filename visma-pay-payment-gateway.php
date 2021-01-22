@@ -3,7 +3,7 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Visma
  * Author URI: https://www.visma.fi/vismapay/
  * Text Domain: visma-pay-payment-gateway
@@ -282,10 +282,17 @@ function init_visma_pay_gateway()
 								}
 								else if($method->group == 'creditinvoices')
 								{
-									if($method->selected_value == 'laskuyritykselle' && $this->laskuyritykselle == 'yes')
-										$creditinvoices .= '<div id="visma-pay-button-' . esc_attr($method->selected_value) . '" class="bank-button"><img alt="' . esc_attr($method->name) . '" src="' . esc_url($plugin_url.$img) . '"/></div>';
+									if($method->selected_value == 'laskuyritykselle')
+									{
+										if($this->laskuyritykselle == 'yes')
+										{
+											$creditinvoices .= '<div id="visma-pay-button-' . esc_attr($method->selected_value) . '" class="bank-button"><img alt="' . esc_attr($method->name) . '" src="' . esc_url($plugin_url.$img) . '"/></div>';
+										}
+									}
 									else if($this->cinvoices == 'yes' && ((!isset($order) && $cart_total >= $method->min_amount && $cart_total <= $method->max_amount) || ($total >= $method->min_amount && $total <= $method->max_amount)))
+									{
 										$creditinvoices .= '<div id="visma-pay-button-' . esc_attr($method->selected_value) . '" class="bank-button"><img alt="' . esc_attr($method->name) . '" src="' . esc_url($plugin_url.$img) . '"/></div>';
+									}
 								}
 							}
 
@@ -543,10 +550,17 @@ function init_visma_pay_gateway()
 									}
 									else if($method->group == 'creditinvoices')
 									{
-										if($method->selected_value == 'laskuyritykselle' && $this->laskuyritykselle == 'yes')
+										if($method->selected_value == 'laskuyritykselle')
+										{
+											if($this->laskuyritykselle == 'yes')
+											{
 												$vp_selected[] = $method->selected_value;
+											}
+										} 
 										else if($this->cinvoices == 'yes' && ((!isset($order) && $cart_total >= $method->min_amount && $cart_total <= $method->max_amount) || ($total >= $method->min_amount && $total <= $method->max_amount)))
+										{
 											$vp_selected[] = $method->selected_value;
+										}
 									}
 								}
 							}
