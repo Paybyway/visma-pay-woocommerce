@@ -68,7 +68,7 @@ function init_visma_pay_gateway()
 			$this->limit_currencies = $this->get_option('limit_currencies');
 
 			// Make fellow finance first payment method with bigger button
-			$this->promoFellowFinance = true;
+			$this->promoFellowFinance = false;
 
 			add_action('wp_enqueue_scripts', array( $this, 'payment_scripts' ) );
 			add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options' ) );
