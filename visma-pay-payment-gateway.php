@@ -3,13 +3,13 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.0.2
+ * Version: 1.0.4
  * Author: Visma
  * Author URI: https://www.visma.fi/vismapay/
  * Text Domain: visma-pay-payment-gateway
  * Domain Path: /languages
  * WC requires at least: 3.0.0
- * WC tested up to: 5.1.0
+ * WC tested up to: 5.5.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -66,6 +66,9 @@ function init_visma_pay_gateway()
 
 			$this->cancel_url = $this->get_option('cancel_url');
 			$this->limit_currencies = $this->get_option('limit_currencies');
+
+			// Make fellow finance first payment method with bigger button
+			$this->promoFellowFinance = true;
 
 			add_action('wp_enqueue_scripts', array( $this, 'payment_scripts' ) );
 			add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options' ) );
@@ -222,9 +225,9 @@ function init_visma_pay_gateway()
 					'default' => 'yes'
 				),
 				'laskuyritykselle' => array(
-					'title' => __( 'Lasku Yritykselle', 'visma-pay-payment-gateway' ),
+					'title' => __( 'Fellow Yrityslasku', 'visma-pay-payment-gateway' ),
 					'type' => 'checkbox',
-					'label' => __( 'Enable Lasku Yritykselle in the Visma Pay payment page.', 'visma-pay-payment-gateway' ),
+					'label' => __( 'Enable Fellow Yrityslasku in the Visma Pay payment page.', 'visma-pay-payment-gateway' ),
 					'default' => 'no'
 				)
 			));
@@ -250,6 +253,7 @@ function init_visma_pay_gateway()
 			if($this->embed == 'yes')
 			{
 				$creditcards = $banks = $creditinvoices = $wallets = '';
+				$fellowfinance = '';
 				include(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
 				$payment_methods = new Visma\VismaPay($this->api_key, $this->private_key);
 				try
@@ -291,7 +295,13 @@ function init_visma_pay_gateway()
 									}
 									else if($this->cinvoices == 'yes' && ((!isset($order) && $cart_total >= $method->min_amount && $cart_total <= $method->max_amount) || ($total >= $method->min_amount && $total <= $method->max_amount)))
 									{
-										$creditinvoices .= '<div id="visma-pay-button-' . esc_attr($method->selected_value) . '" class="bank-button"><img alt="' . esc_attr($method->name) . '" src="' . esc_url($plugin_url.$img) . '"/></div>';
+										if ($method->selected_value == 'fellowfinance' && $this->promoFellowFinance) {
+											$exp = explode('.', $img);
+											$fellowbigimg = $exp[0].'_big.'.$exp[1];
+											$fellowfinance = '<div id="visma-pay-button-' . esc_attr($method->selected_value) . '" class="bank-button bank-button-big"><img alt="' . esc_attr($method->name) . '" src="' . esc_url($plugin_url.$fellowbigimg) . '"/></div>';
+										} else {
+											$creditinvoices .= '<div id="visma-pay-button-' . esc_attr($method->selected_value) . '" class="bank-button"><img alt="' . esc_attr($method->name) . '" src="' . esc_url($plugin_url.$img) . '"/></div>';
+										}
 									}
 								}
 							}
@@ -322,6 +332,9 @@ function init_visma_pay_gateway()
 				
 
 				echo '<br/><div id="visma-pay-bank-payments">';
+				if ($fellowfinance != '')
+					echo '<div>'.wpautop(wptexturize(__( 'Fellow Invoice', 'visma-pay-payment-gateway' ))) . $fellowfinance . '</div>' . $clear_both;
+
 				if($creditcards != '')
 					echo '<div>'.wpautop(wptexturize(__( 'Payment card', 'visma-pay-payment-gateway' ))) . $creditcards . '</div>' . $clear_both;
 
@@ -682,6 +695,9 @@ function init_visma_pay_gateway()
 
 		protected function sanitize_visma_pay_order_number($order_number)
 		{
+			if (function_exists('mb_ereg_replace')) {
+				return mb_ereg_replace('/[^\-\p{L}\p{N}_\s@&\/\\()?!=+£$€.,;:*%]/', '', $order_number);
+			}
 			return preg_replace('/[^\-\p{L}\p{N}_\s@&\/\\()?!=+£$€.,;:*%]/', '', $order_number);
 		}
 

@@ -18,6 +18,5 @@ jQuery(document).ready(function($){
 			var selected = id.replace('visma-pay-button-','');
 			jQuery('#visma_pay_selected_bank').val(selected);
 		});
-
 	});
 }(jQuery));

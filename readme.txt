@@ -3,12 +3,12 @@ Contributors: hsuvant
 Donate link: 
 Tags: payment gateway, visma, pay, verkkomaksut, pankit, vismapay
 Requires at least: 3.3
-Tested up to: 5.7
+Tested up to: 5.8.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.0.0
-WC tested up to: 5.1.0
+WC tested up to: 5.5.2
 
 Visma Pay plugin for Woocommerce.
 
@@ -19,7 +19,7 @@ Visma Pay plugin allows you to accept e-payments through most Finnish banks, cre
 This is a plugin for integrating Visma Pay payment gateway with your Woocommerce store. Accept payments with this plugin, you need to have an active contract with [Visma Pay](https://www.visma.fi/vismapay/). You can order Visma Pay [here](https://www.visma.fi/vismapay/tilaa-visma-pay/) (See [terms](https://static.vismapay.com/yleiset-ehdot.pdf)).
 
 = Supported payment methods =
-Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, Handelsbanken, S-Pankki, Ålandsbanken, Oma Säästöpankki, Visa, Visa Electron, Mastercard, Jousto, Mash, MobilePay, Masterpass, Pivo and Siirto.
+Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, Handelsbanken, S-Pankki, Ålandsbanken, Oma Säästöpankki, Visa, Mastercard, Jousto, MobilePay, Fellow Lasku, Fellow Yrityslasku, Pivo and Siirto.
 
 == Installation ==
 
@@ -37,7 +37,10 @@ Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, H
 
 
 == Changelog ==
--
+
+= 1.0.4 =
+* Enterpay-yrityslasku rebranded to Fellow Yrityslasku.
+* Fix issue with multibyte characters in order number prefix.
 
 
 == Upgrade notice ==
