@@ -3,13 +3,13 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Visma
  * Author URI: https://www.visma.fi/vismapay/
  * Text Domain: visma-pay-payment-gateway
  * Domain Path: /languages
  * WC requires at least: 3.0.0
- * WC tested up to: 5.5.2
+ * WC tested up to: 6.2.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -286,7 +286,7 @@ function init_visma_pay_gateway()
 								}
 								else if($method->group == 'creditinvoices')
 								{
-									if($method->selected_value == 'laskuyritykselle')
+									if($method->selected_value == 'laskuyritykselle' && ((!isset($order) && $cart_total >= $method->min_amount && $cart_total <= $method->max_amount) || ($total >= $method->min_amount && $total <= $method->max_amount)))
 									{
 										if($this->laskuyritykselle == 'yes')
 										{
@@ -563,7 +563,7 @@ function init_visma_pay_gateway()
 									}
 									else if($method->group == 'creditinvoices')
 									{
-										if($method->selected_value == 'laskuyritykselle')
+										if($method->selected_value == 'laskuyritykselle' && ((!isset($order) && $cart_total >= $method->min_amount && $cart_total <= $method->max_amount) || ($total >= $method->min_amount && $total <= $method->max_amount)))
 										{
 											if($this->laskuyritykselle == 'yes')
 											{
@@ -951,7 +951,7 @@ function init_visma_pay_gateway()
 						$settlement_msg = __('Settlement failed. Either the payment has already been settled or the payment gateway refused to settle payment for given transaction.', 'visma-pay-payment-gateway');
 						break;
 					default:
-						$settlement_msg = __('Settlement failed. Unkown error.', 'visma-pay-payment-gateway');
+						$settlement_msg = __('Settlement failed. Unknown error.', 'visma-pay-payment-gateway');
 						break;
 				}
 			}

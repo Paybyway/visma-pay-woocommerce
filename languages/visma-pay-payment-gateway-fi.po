@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-06 08:55+0000\n"
 "Last-Translator: \n"
-"PO-Revision-Date: 2021-10-28 06:33+0000\n"
+"PO-Revision-Date: 2022-03-04 10:26+0000\n"
 "Language-Team: Suomi\n"
 "Language: fi\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
@@ -23,7 +23,7 @@ msgstr ""
 "sivua, niin asiakkaan ostoskoria ei tyhjennetä maksamaan siirtymisen "
 "yhteydessä )"
 
-#: visma-pay-payment-gateway.php:1023
+#: visma-pay-payment-gateway.php:1026
 msgid ""
 "3-D Secure was attempted but not supported by the card issuer or the card "
 "holder is not participating."
@@ -31,11 +31,11 @@ msgstr ""
 "3-D Secure varmennusta yritettiin, mutta kortinmyöntäjä tai -haltija ei "
 "käytä varmennusta."
 
-#: visma-pay-payment-gateway.php:1021
+#: visma-pay-payment-gateway.php:1024
 msgid "3-D Secure was not used."
 msgstr "3-D Secure varmennusta ei käytetty."
 
-#: visma-pay-payment-gateway.php:1019
+#: visma-pay-payment-gateway.php:1022
 msgid "3-D Secure was used."
 msgstr "3-D Secure varmennettu tapahtuma."
 
@@ -55,17 +55,17 @@ msgstr "Verkkopankit"
 msgid "Cancel Page"
 msgstr "Peruutetun maksun paluusivu"
 
-#: visma-pay-payment-gateway.php:762
+#: visma-pay-payment-gateway.php:765
 msgid "Card country: "
 msgstr "Kortin maakoodi: "
 
-#: visma-pay-payment-gateway.php:852
+#: visma-pay-payment-gateway.php:855
 msgid "Card payment failed. Your card has not been charged."
 msgstr ""
 "Korttimaksun veloitus epäonnistui. Yrittäkää maksamista uudelleen tai "
 "valitkaa jokin toinen maksutapa."
 
-#: visma-pay-payment-gateway.php:754
+#: visma-pay-payment-gateway.php:757
 msgid "Card payment info: "
 msgstr "Korttimaksun lisätiedot: "
 
@@ -101,7 +101,7 @@ msgstr ""
 msgid "Choose your payment method and click Pay for Order"
 msgstr "Valitse maksutapa ja klikkaa Lähetä Tilaus -painiketta."
 
-#: visma-pay-payment-gateway.php:763
+#: visma-pay-payment-gateway.php:766
 msgid "Client IP country: "
 msgstr "Asiakkaan IP:n maakoodi: "
 
@@ -157,15 +157,15 @@ msgstr "Ota lompakkopalvelut käyttöön maksusivulla. (MobilePay ja Masterpass)
 msgid "Enable/Disable"
 msgstr "Ota käyttöön / Poista käytöstä"
 
-#: visma-pay-payment-gateway.php:768
+#: visma-pay-payment-gateway.php:771
 msgid "Error: "
 msgstr "Virhe: "
 
-#: visma-pay-payment-gateway.php:958
+#: visma-pay-payment-gateway.php:961
 msgid "Exception, error: "
 msgstr "Exception, virhe: "
 
-#: visma-pay-payment-gateway.php:1002
+#: visma-pay-payment-gateway.php:1005
 msgid "Expired card."
 msgstr "Vanhentunut kortti."
 
@@ -177,7 +177,7 @@ msgstr "Fellow Lasku"
 msgid "Fellow Yrityslasku"
 msgstr "Fellow Yrityslasku"
 
-#: visma-pay-payment-gateway.php:998
+#: visma-pay-payment-gateway.php:1001
 msgid ""
 "General decline. The card holder should contact the issuer to find out why "
 "the payment failed."
@@ -197,7 +197,7 @@ msgstr "https://www.visma.fi/vismapay/"
 msgid "https://www.vismapay.com/docs"
 msgstr "https://www.vismapay.com/docs"
 
-#: visma-pay-payment-gateway.php:1000
+#: visma-pay-payment-gateway.php:1003
 msgid ""
 "Insufficient funds. The card holder should verify that there is balance on "
 "the account and the online payments are actived."
@@ -213,7 +213,7 @@ msgstr "Verkkopankkimaksu"
 msgid "Invoice or part payment"
 msgstr "Lasku tai osamaksu"
 
-#: visma-pay-payment-gateway.php:820
+#: visma-pay-payment-gateway.php:823
 msgid ""
 "Maintenance break. The transaction is not created and the user has been "
 "notified and transferred back to the cancel address."
@@ -269,7 +269,7 @@ msgstr ""
 "Maksa ostoksesi turvallisesti verkkopankin kautta, korttimaksulla, "
 "lompakkopalvelulla tai luottolaskulla."
 
-#: visma-pay-payment-gateway.php:792
+#: visma-pay-payment-gateway.php:795
 msgid "Payment accepted."
 msgstr "Maksu hyväksytty."
 
@@ -281,16 +281,16 @@ msgstr "Korttimaksu"
 msgid "Payment failed due to an error."
 msgstr "Maksu epäonnistui - Tapahtui virhe."
 
-#: visma-pay-payment-gateway.php:789
+#: visma-pay-payment-gateway.php:792
 msgid "Payment is authorized. Use settle option to capture funds."
 msgstr ""
 "Maksu varmennettu. Maksu veloitetaan painamalla Veloita maksu -painiketta."
 
-#: visma-pay-payment-gateway.php:772
+#: visma-pay-payment-gateway.php:775
 msgid "Payment method: "
 msgstr "Valittu maksutapa: "
 
-#: visma-pay-payment-gateway.php:753
+#: visma-pay-payment-gateway.php:756
 msgid "Payment method: Card payment"
 msgstr "Maksutapa: Korttimaksu"
 
@@ -298,15 +298,15 @@ msgstr "Maksutapa: Korttimaksu"
 msgid "Payment pending. Waiting for result."
 msgstr "Maksaminen kesken. Odottaa tulosta."
 
-#: visma-pay-payment-gateway.php:900
+#: visma-pay-payment-gateway.php:903
 msgid "Payment settled."
 msgstr "Maksu veloitettu."
 
-#: visma-pay-payment-gateway.php:854
+#: visma-pay-payment-gateway.php:857
 msgid "Payment was canceled or charge was not accepted."
 msgstr "Maksu keskeytettiin tai maksun veloitus epäonnistui."
 
-#: visma-pay-payment-gateway.php:804
+#: visma-pay-payment-gateway.php:807
 msgid "Payment was not accepted."
 msgstr "Maksu epäonnistui tai se keskeytettiin."
 
@@ -324,7 +324,7 @@ msgstr "Yksityinen salausavain"
 msgid "Private key of the sub-merchant"
 msgstr "Alikauppiaan yksityinen salausavain"
 
-#: visma-pay-payment-gateway.php:1006
+#: visma-pay-payment-gateway.php:1009
 msgid ""
 "Restricted card. The card holder should verify that the online payments are "
 "actived."
@@ -355,11 +355,11 @@ msgstr ""
 "Visma Pay lähettää asiakkaalle maksuvahvistuksen onnistuneesta "
 "maksutapahtumasta."
 
-#: visma-pay-payment-gateway.php:918
+#: visma-pay-payment-gateway.php:921
 msgid "Settle payment"
 msgstr "Veloita maksu"
 
-#: visma-pay-payment-gateway.php:948
+#: visma-pay-payment-gateway.php:951
 msgid ""
 "Settlement failed. Either the payment has already been settled or the "
 "payment gateway refused to settle payment for given transaction."
@@ -367,21 +367,21 @@ msgstr ""
 "Maksua ei voitu veloittaa. Joko maksu on jo veloitettu, tai luottolaitos "
 "hylkäsi veloituspyynnön"
 
-#: visma-pay-payment-gateway.php:951
-msgid "Settlement failed. Unkown error."
+#: visma-pay-payment-gateway.php:954
+msgid "Settlement failed. Unknown error."
 msgstr ""
 "Tuntematon paluuarvo. Mikäli ongelma toistuu, ota yhteyttä "
 "asiakaspalveluumme."
 
-#: visma-pay-payment-gateway.php:945
+#: visma-pay-payment-gateway.php:948
 msgid "Settlement failed. Validation failed."
 msgstr "Veloitus epäonnistui. Validointi epäonnistui."
 
-#: visma-pay-payment-gateway.php:942
+#: visma-pay-payment-gateway.php:945
 msgid "Settlement was successful."
 msgstr "Maksu veloitettiin onnistuneesti."
 
-#: visma-pay-payment-gateway.php:996
+#: visma-pay-payment-gateway.php:999
 msgid "The card is reported lost or stolen."
 msgstr "Kortti on ilmoitettu kadonneeksi tai varastetuksi."
 
@@ -401,7 +401,7 @@ msgstr "Kassasivulla näkyvä maksutavan kuvauksen toinen osa (ohjeistus)."
 msgid "This controls the title which the user sees during checkout."
 msgstr "Maksutavan kassasivulla näkyvä otsikko."
 
-#: visma-pay-payment-gateway.php:1008
+#: visma-pay-payment-gateway.php:1011
 msgid ""
 "Timeout communicating with the acquirer. The payment should be tried again "
 "later."
@@ -412,7 +412,7 @@ msgstr ""
 msgid "Title"
 msgstr "Otsikko"
 
-#: visma-pay-payment-gateway.php:812
+#: visma-pay-payment-gateway.php:815
 msgid ""
 "Transaction status could not be updated after customer returned from the web "
 "page of a bank. Please use the merchant UI to resolve the payment status."
@@ -421,7 +421,7 @@ msgstr ""
 "verkkopankista. Käytä Visma Payn kauppiasportaalia selvittääksesi maksun "
 "tila."
 
-#: visma-pay-payment-gateway.php:759
+#: visma-pay-payment-gateway.php:762
 msgid "Verified: "
 msgstr "Varmennus: "
 
@@ -433,8 +433,8 @@ msgstr "Visma"
 msgid "Visma Pay"
 msgstr "Visma Pay"
 
-#: visma-pay-payment-gateway.php:626 visma-pay-payment-gateway.php:789
-#: visma-pay-payment-gateway.php:792
+#: visma-pay-payment-gateway.php:626 visma-pay-payment-gateway.php:792
+#: visma-pay-payment-gateway.php:795
 msgid "Visma Pay order"
 msgstr "Visma Pay tilaus"
 
@@ -480,6 +480,6 @@ msgstr "Lompakkopalvelut"
 msgid "Wallets"
 msgstr "Lompakot"
 
-#: visma-pay-payment-gateway.php:1004
+#: visma-pay-payment-gateway.php:1007
 msgid "Withdrawal amount limit exceeded."
 msgstr "Kortin maksuraja ylittyi."
