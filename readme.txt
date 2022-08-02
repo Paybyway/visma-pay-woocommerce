@@ -3,12 +3,12 @@ Contributors: hsuvant
 Donate link:
 Tags: payment gateway, visma, pay, verkkomaksut, pankit, vismapay
 Requires at least: 3.3
-Tested up to: 5.9.1
+Tested up to: 6.0.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.0.0
-WC tested up to: 6.2.1
+WC tested up to: 6.7.0
 
 Visma Pay plugin for Woocommerce.
 
@@ -20,7 +20,7 @@ This is a plugin for integrating Visma Pay payment gateway with your Woocommerce
 
 
 = Supported payment methods =
-Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, Handelsbanken, S-Pankki, Ålandsbanken, Oma Säästöpankki, Visa, Mastercard, Jousto, MobilePay, Fellow Lasku, Fellow Yrityslasku, Pivo and Siirto.
+Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, Handelsbanken, S-Pankki, Ålandsbanken, Oma Säästöpankki, Visa, Mastercard, Jousto, MobilePay, Fellow Lasku, Fellow Yrityslasku, OP Lasku, Pivo and Siirto.
 
 == Installation ==
 
@@ -38,6 +38,10 @@ Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, H
 
 
 == Changelog ==
+
+= 1.0.5 =
+* Updated 'tested up to' versions.
+* Updated payment method logos.
 
 = 1.0.5 =
 * Fixed issue where Fellow Yrityslasku maximum and minimum amounts were not checked.
