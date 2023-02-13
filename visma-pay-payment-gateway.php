@@ -3,13 +3,13 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Visma
  * Author URI: https://www.visma.fi/vismapay/
  * Text Domain: visma-pay-payment-gateway
  * Domain Path: /languages
  * WC requires at least: 3.0.0
- * WC tested up to: 6.7.0
+ * WC tested up to: 7.3.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -836,7 +836,7 @@ function init_visma_pay_gateway()
 					$this->visma_pay_die("MAC check failed");
 
 				$cancel_url_option = $this->get_option('cancel_url', '');
-				$card = ($result->source->object === 'card') ? true : false;
+				$card = (isset($result->source->object) && $result->source->object === 'card') ? true : false;
 				$redirect_url = $this->visma_pay_url($return_code, $order, $cancel_url_option, $card);
 				wp_redirect($redirect_url);
 				exit('Ok');
