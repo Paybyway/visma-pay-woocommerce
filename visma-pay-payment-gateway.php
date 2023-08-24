@@ -3,18 +3,24 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Visma
  * Author URI: https://www.visma.fi/vismapay/
  * Text Domain: visma-pay-payment-gateway
  * Domain Path: /languages
  * WC requires at least: 3.0.0
- * WC tested up to: 7.6.0
+ * WC tested up to: 8.0.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+add_action( 'before_woocommerce_init', function() {
+	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+	}
+} );
 
 add_action('plugins_loaded', 'init_visma_pay_gateway', 0);
 
@@ -23,6 +29,7 @@ function woocommerce_add_WC_Gateway_Visma_Pay($methods)
 	$methods[] = 'WC_Gateway_Visma_Pay';
 	return $methods;
 }
+
 add_filter('woocommerce_payment_gateways', 'woocommerce_add_WC_Gateway_Visma_Pay');
 
 function init_visma_pay_gateway()
@@ -66,6 +73,9 @@ function init_visma_pay_gateway()
 
 			$this->cancel_url = $this->get_option('cancel_url');
 			$this->limit_currencies = $this->get_option('limit_currencies');
+
+			$this->logger = wc_get_logger();
+			$this->logcontext = array('source' => 'visma-pay-payment-gateway');
 
 			add_action('wp_enqueue_scripts', array( $this, 'payment_scripts' ) );
 			add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options' ) );
@@ -314,21 +324,20 @@ function init_visma_pay_gateway()
 				}
 				catch (Visma\VismaPayException $e) 
 				{
-					$logger = new WC_Logger();
-					$logger->add( 'visma-pay-payment-gateway', 'Visma Pay REST::getMerchantPaymentMethods failed, exception: ' . $e->getCode().' '.$e->getMessage());
+					$this->logger->error('Visma Pay REST::getMerchantPaymentMethods failed, exception: ' . $e->getCode().' '.$e->getMessage(), $this->logcontext );
 				}
 
 				$clear_both = '<div style="display: block; clear: both;"></div>';
 				
-				echo '<br/><div id="visma-pay-bank-payments">';
+				echo '<div id="visma-pay-bank-payments">';
+				if($banks != '')
+					echo '<div>'.wpautop(wptexturize(__( 'Internet banking', 'visma-pay-payment-gateway' ))) . $banks . '</div>' . $clear_both;
+
 				if($creditcards != '')
 					echo '<div>'.wpautop(wptexturize(__( 'Payment card', 'visma-pay-payment-gateway' ))) . $creditcards . '</div>' . $clear_both;
 
 				if($wallets != '')
 					echo '<div>'.wpautop(wptexturize(__( 'Wallet services', 'visma-pay-payment-gateway' ))) . $wallets . '</div>' . $clear_both;
-
-				if($banks != '')
-					echo '<div>'.wpautop(wptexturize(__( 'Internet banking', 'visma-pay-payment-gateway' ))) . $banks . '</div>' . $clear_both;
 
 				if($creditinvoices != '')
 					echo '<div>'.wpautop(wptexturize(__( 'Invoice or part payment', 'visma-pay-payment-gateway' ))) . $creditinvoices . '</div>' . $clear_both;
@@ -349,7 +358,6 @@ function init_visma_pay_gateway()
 				return false;
 
 			$order = new WC_Order($order_id);
-
 			$wc_order_id = $order->get_id();
 			$wc_order_total = $order->get_total();
 
@@ -566,8 +574,7 @@ function init_visma_pay_gateway()
 
 							if(empty($vp_selected))
 							{
-								$logger = new WC_Logger();
-								$logger->add( 'visma-pay-payment-gateway', 'Visma Pay no payment methods available for order: ' . $order_number . ', currency: ' . get_woocommerce_currency());
+								$this->logger->info('Visma Pay no payment methods available for order: ' . $order_number . ', currency: ' . get_woocommerce_currency(), $this->logcontext);
 								wc_add_notice(__('Visma Pay: No payment methods available for the currency: ', 'visma-pay-payment-gateway') . get_woocommerce_currency(), 'error');
 								$order_number_text = __('Visma Pay: No payment methods available for the currency: ', 'visma-pay-payment-gateway') .  get_woocommerce_currency();
 								$order->add_order_note($order_number_text);
@@ -577,15 +584,13 @@ function init_visma_pay_gateway()
 					}
 					catch (Visma\VismaPayException $e) 
 					{
-						$logger = new WC_Logger();
-						$logger->add( 'visma-pay-payment-gateway', 'Visma Pay getMerchantPaymentMethods failed for order: ' . $order_number . ', exception: ' . $e->getCode().' '.$e->getMessage());
+						$this->logger->error('Visma Pay getMerchantPaymentMethods failed for order: ' . $order_number . ', exception: ' . $e->getCode().' '.$e->getMessage(), $this->logcontext);
 					}
 				}
 				else
 				{
 					$error_text = __('Visma Pay: "Only allow payments in EUR" is enabled and currency was not EUR for order: ', 'visma-pay-payment-gateway');
-					$logger = new WC_Logger();
-					$logger->add( $error_text . $order_number);
+					$this->logger->info($error_text, $this->logcontext);
 					wc_add_notice(__('Visma Pay: No payment methods available for the currency: ', 'visma-pay-payment-gateway') . get_woocommerce_currency(), 'notice');
 					$order->add_order_note($error_text . $order_number);
 					return;
@@ -613,7 +618,7 @@ function init_visma_pay_gateway()
 					$order->add_order_note($order_number_text);
 
 					$order->update_meta_data('visma_pay_order_number', $order_number);
-					$order_numbers = get_post_meta($order_id, 'visma_pay_order_numbers', true);
+					$order_numbers = $order->get_meta('visma_pay_order_numbers', true, 'edit');
 					$order_numbers = ($order_numbers) ? array_values($order_numbers) : array();
 					$order_numbers[] = $order_number;
 					$order->update_meta_data('visma_pay_order_numbers', $order_numbers);
@@ -633,15 +638,13 @@ function init_visma_pay_gateway()
 				{
 					$errors = '';
 					wc_add_notice(__('Visma Pay system is currently in maintenance. Please try again in a few minutes.', 'visma-pay-payment-gateway'), 'notice');
-					$logger = new WC_Logger();
-					$logger->add( 'visma-pay-payment-gateway', 'Visma Pay REST::CreateCharge. Visma Pay system maintenance in progress.');
+					$this->logger->info('Visma Pay REST::CreateCharge. Visma Pay system maintenance in progress.', $this->logcontext);
 					return;
 				}
 				else
 				{
 					$errors = '';
 					wc_add_notice(__('Payment failed due to an error.', 'visma-pay-payment-gateway'), 'error');
-					$logger = new WC_Logger();
 					if(isset($response->errors))
 					{
 						foreach ($response->errors as $error) 
@@ -649,15 +652,14 @@ function init_visma_pay_gateway()
 							$errors .= ' '.$error;
 						}
 					}
-					$logger->add( 'visma-pay-payment-gateway', 'Visma Pay REST::CreateCharge failed, response: ' . $response->result . ' - Errors:'.$errors);
+					$this->logger->error('Visma Pay REST::CreateCharge failed, response: ' . $response->result . ' - Errors:'.$errors, $this->logcontext);
 					return;
 				}
 			}
 			catch (Visma\VismaPayException $e) 
 			{
 				wc_add_notice(__('Payment failed due to an error.', 'visma-pay-payment-gateway'), 'error');
-				$logger = new WC_Logger();
-				$logger->add( 'visma-pay-payment-gateway', 'Visma Pay REST::CreateCharge failed, exception: ' . $e->getCode().' '.$e->getMessage());
+				$this->logger->error('Visma Pay REST::CreateCharge failed, exception: ' . $e->getCode().' '.$e->getMessage(), $this->logcontext);
 				return;
 			}
 		}
@@ -665,11 +667,11 @@ function init_visma_pay_gateway()
 		function get_order_by_id_and_order_number($order_id, $order_number)
 		{
 			$order = New WC_Order($order_id);
-			$order_numbers = get_post_meta($order_id, 'visma_pay_order_numbers', true);
+			$order_numbers = $order->get_meta('visma_pay_order_numbers', true, 'edit');
 
 			if(!$order_numbers)
 			{
-				$current_order_number = get_post_meta($order_id, 'visma_pay_order_number', true);
+				$current_order_number = $order->get_meta('visma_pay_order_number', true, 'edit');
 				$order_numbers = array($current_order_number);
 			}
 
@@ -726,7 +728,7 @@ function init_visma_pay_gateway()
 
 				if($authcode_confirm === $authcode && $order)
 				{
-					$current_return_code = get_post_meta($wc_order_id, 'visma_pay_return_code', true);
+					$current_return_code = $order->get_meta('visma_pay_return_code', true, 'edit');
 
 					if(!$order->is_paid() && $current_return_code != 0)
 					{
@@ -762,9 +764,8 @@ function init_visma_pay_gateway()
 						}
 						catch(Visma\VismaPayException $e)
 						{
-							$logger = new WC_Logger();
 							$message = $e->getMessage();
-							$logger->add( 'visma-pay-payment-gateway', 'Visma Pay REST::checkStatusWithOrderNumber failed, message: ' . $message);
+							$this->logger->error('Visma Pay REST::checkStatusWithOrderNumber failed, message: ' . $message, $this->logcontext );
 						}
 
 						switch($return_code)
@@ -870,8 +871,7 @@ function init_visma_pay_gateway()
 		function visma_pay_settle_payment($order)
 		{
 			$wc_order_id = $order->get_id();			
-
-			$settle_field = get_post_meta( $wc_order_id, 'visma_pay_is_settled', true );
+			$settle_field = $order->get_meta('visma_pay_is_settled', true, 'edit');
 			$settle_check = empty($settle_field) && $settle_field == "0";
 
 			if(!$settle_check)
@@ -881,7 +881,7 @@ function init_visma_pay_gateway()
 
 			if(isset($_GET['visma_pay_settle']))
 			{
-				$order_number = get_post_meta( $wc_order_id, 'visma_pay_order_number', true );
+				$order_number = $order->get_meta('visma_pay_order_number', true, 'edit');
 				$settlement_msg = '';
 
 				if($this->process_settlement($order_number, $settlement_msg))
@@ -1017,8 +1017,7 @@ function init_visma_pay_gateway()
 
 		function visma_pay_die($msg = '')
 		{
-			$logger = new WC_Logger();
-			$logger->add( 'visma-pay-payment-gateway', 'Visma Pay - return failed. Error: ' . $msg);
+			$this->logger->error('Visma Pay - return failed. Error: ' . $msg, $this->logcontext );
 			status_header(400);
 			nocache_headers();
 			die($msg);

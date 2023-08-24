@@ -3,12 +3,12 @@ Contributors: hsuvant
 Donate link:
 Tags: payment gateway, visma, pay, verkkomaksut, pankit, vismapay
 Requires at least: 3.3
-Tested up to: 6.2.0
+Tested up to: 6.3.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.0.0
-WC tested up to: 7.6.0
+WC tested up to: 8.0.2
 
 Visma Pay plugin for Woocommerce.
 
@@ -38,6 +38,11 @@ Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, H
 
 
 == Changelog ==
+
+= 1.0.9 =
+* Support for HSOP
+* Updated order of payment methods
+* Updated 'tested up to' versions.
 
 = 1.0.8 =
 * Rebranded Fellow Lasku to Alisa Lasku and Fellow Yrityslasku to Alisa Yrityslasku.
