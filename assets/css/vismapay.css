@@ -1,13 +1,13 @@
 /* Visma Pay bank payment form */
 
-#payment #visma-pay-bank-payments {
+#visma-pay-bank-payments {
   position: relative;
   clear: both;
   overflow: auto;
   margin: 0 0 10px 0;
 
 }
-#payment #visma-pay-bank-payments:after {
+#visma-pay-bank-payments:after {
   content: ' ';
   clear: both;
 
@@ -21,7 +21,7 @@ ul.payment_methods li {
 ul.payment_methods li.payment_method_visma_pay p {
   clear: both;
 }
-#payment #visma-pay-bank-payments .bank-button {
+#visma-pay-bank-payments .bank-button {
   background-color: #fff;
   width: 110px;
   height: 70px;
@@ -36,7 +36,7 @@ ul.payment_methods li.payment_method_visma_pay p {
   cursor: pointer;
 }
 
-#payment #visma-pay-bank-payments .bank-button img{
+#visma-pay-bank-payments .bank-button img{
 	max-width: 106px;
 	margin: 0 !important;
 	max-height: 66px !important;
@@ -46,15 +46,15 @@ ul.payment_methods li.payment_method_visma_pay p {
 	position: static;
 }
 
-#payment #visma-pay-bank-payments .bank-button:hover {
+#visma-pay-bank-payments .bank-button:hover {
   box-shadow: 1px 1px 4px rgba(50,100,150,0.4);
   cursor: pointer;
 }
-#payment #visma-pay-bank-payments .bank-button.selected {
+#visma-pay-bank-payments .bank-button.selected {
   border-color: #59416c;   
 }
 
-#payment #visma-pay-bank-payments .bank-button-big {
+#visma-pay-bank-payments .bank-button-big {
   background-color: #fff;
   width: 226px;
   height: 136px;
@@ -69,7 +69,7 @@ ul.payment_methods li.payment_method_visma_pay p {
   cursor: pointer;
 }
 
-#payment #visma-pay-bank-payments .bank-button-big img{
+#visma-pay-bank-payments .bank-button-big img{
   max-width: 222px;
   margin: 0 !important;
   max-height: 133px !important;

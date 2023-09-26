@@ -3,12 +3,12 @@ Contributors: hsuvant
 Donate link:
 Tags: payment gateway, visma, pay, verkkomaksut, pankit, vismapay
 Requires at least: 3.3
-Tested up to: 6.3.0
+Tested up to: 6.3.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.0.0
-WC tested up to: 8.0.2
+WC tested up to: 8.1.1
 
 Visma Pay plugin for Woocommerce.
 
@@ -38,6 +38,10 @@ Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, H
 
 
 == Changelog ==
+
+= 1.1.0 =
+* Support for Woocommerce Blocks
+* Updated 'tested up to' versions.
 
 = 1.0.9 =
 * Support for HSOP
