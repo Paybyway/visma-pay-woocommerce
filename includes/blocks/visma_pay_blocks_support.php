@@ -10,7 +10,9 @@ final class WC_Gateway_Visma_Pay_Blocks_Support extends AbstractPaymentMethodTyp
 	public function initialize()
 	{
 		$this->settings = get_option('woocommerce_visma_pay_settings', []);
-		$this->gateway = new WC_Gateway_Visma_Pay();
+		$payment_gateways_class = WC()->payment_gateways();
+		$payment_gateways = $payment_gateways_class->payment_gateways();
+		$this->gateway = $payment_gateways['visma_pay'];
 	}
 
 	public function is_active()

@@ -39,12 +39,18 @@ Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, H
 
 == Changelog ==
 
+= 1.1.2 =
+* Fixed issues caused when Woocommerce Blocks was enabled
+
+= 1.1.1 =
+* Added files that were missing from 1.1.0
+
 = 1.1.0 =
 * Support for Woocommerce Blocks
 * Updated 'tested up to' versions.
 
 = 1.0.9 =
-* Support for HSOP
+* Support for HPOS
 * Updated order of payment methods
 * Updated 'tested up to' versions.
 

@@ -3,7 +3,7 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.1.0
+ * Version: 1.1.2
  * Author: Visma
  * Author URI: https://www.visma.fi/vismapay/
  * Text Domain: visma-pay-payment-gateway
