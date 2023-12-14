@@ -1,26 +1,30 @@
 /* Visma Pay bank payment form */
 
+.woocommerce #payment #visma-pay-bank-payments,
 #visma-pay-bank-payments {
   position: relative;
   clear: both;
   overflow: auto;
   margin: 0 0 10px 0;
-
 }
+
+.woocommerce #payment #visma-pay-bank-payments:after,
 #visma-pay-bank-payments:after {
   content: ' ';
   clear: both;
-
 }
-ul.payment_methods li {
+
+.woocommerce #payment ul.payment_methods li.payment_method_visma_pay,
+ul.payment_methods li.payment_method_visma_pay {
   width: 100%;
 }
-.form-row.place-order {
-  margin-top: 10px;
-}
-ul.payment_methods li.payment_method_visma_pay p {
+
+.woocommerce #payment ul.payment_methods li.payment_method_visma_pay p,
+li.payment_method_visma_pay p {
   clear: both;
 }
+
+.woocommerce #payment #visma-pay-bank-payments .bank-button,
 #visma-pay-bank-payments .bank-button {
   background-color: #fff;
   width: 110px;
@@ -36,7 +40,8 @@ ul.payment_methods li.payment_method_visma_pay p {
   cursor: pointer;
 }
 
-#visma-pay-bank-payments .bank-button img{
+.woocommerce #payment #visma-pay-bank-payments .bank-button > img,
+#visma-pay-bank-payments .bank-button > img {
 	max-width: 106px;
 	margin: 0 !important;
 	max-height: 66px !important;
@@ -46,14 +51,18 @@ ul.payment_methods li.payment_method_visma_pay p {
 	position: static;
 }
 
+.woocommerce #payment #visma-pay-bank-payments .bank-button:hover,
 #visma-pay-bank-payments .bank-button:hover {
   box-shadow: 1px 1px 4px rgba(50,100,150,0.4);
   cursor: pointer;
 }
+
+.woocommerce #payment #visma-pay-bank-payments .bank-button.selected,
 #visma-pay-bank-payments .bank-button.selected {
   border-color: #59416c;   
 }
 
+.woocommerce #payment #visma-pay-bank-payments .bank-button-big,
 #visma-pay-bank-payments .bank-button-big {
   background-color: #fff;
   width: 226px;
@@ -69,7 +78,8 @@ ul.payment_methods li.payment_method_visma_pay p {
   cursor: pointer;
 }
 
-#visma-pay-bank-payments .bank-button-big img{
+.woocommerce #payment #visma-pay-bank-payments .bank-button-big > img,
+#visma-pay-bank-payments .bank-button-big > img {
   max-width: 222px;
   margin: 0 !important;
   max-height: 133px !important;
