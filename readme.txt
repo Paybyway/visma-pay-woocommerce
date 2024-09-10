@@ -39,6 +39,9 @@ Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, H
 
 == Changelog ==
 
+= 1.1.5 =
+* Fixed an issue with incorrect shipping tax rate being sent to Visma Pay API.
+
 = 1.1.4 =
 * Changed Visma Pay API version to w3.2 which supports decimals in tax percent
 * Updated 'tested up to' versions.

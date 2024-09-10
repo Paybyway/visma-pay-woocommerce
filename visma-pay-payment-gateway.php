@@ -3,7 +3,7 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.1.4
+ * Version: 1.1.5
  * Author: Visma
  * Author URI: https://www.visma.fi/vismapay/
  * Text Domain: visma-pay-payment-gateway
@@ -500,8 +500,6 @@ function init_visma_pay_gateway()
 			$wc_s_country = $order->get_shipping_country();
 			$wc_b_phone = $order->get_billing_phone();
 
-			$wc_order_shipping = $order->get_shipping_total();
-			$wc_order_shipping_tax = $order->get_shipping_tax();
 			$visma_pay_selected_bank = isset($_POST['visma_pay_selected_bank']) ? sanitize_text_field($_POST['visma_pay_selected_bank']) : '';
 
 			$order_number = (strlen($this->ordernumber_prefix)  > 0) ?  $this->ordernumber_prefix. '_'  .$order_id : $order_id;
@@ -591,26 +589,42 @@ function init_visma_pay_gateway()
 					'tax' => $line_tax,
 					'type' => 1
 				);
+
 				$total_amount += $product['price'] * $product['count'];
 				array_push($products, $product);
 		 	}
 
-		 	$shipping_items = $order->get_items( 'shipping' );
-		 	foreach($shipping_items as $s_method){
-				$shipping_method_id = $s_method['method_id'] ;
-			}
-		 	if($wc_order_shipping > 0){
-			 	$product = array(
-					'title' => $order->get_shipping_method(),
-					'id' => $shipping_method_id,
-					'count' => 1,
-					'pretax_price' => (int)(round($wc_order_shipping*100, 0)),
-					'price' => (int)(round(($wc_order_shipping_tax+$wc_order_shipping)*100, 0)),
-					'tax' => round(($wc_order_shipping_tax/$wc_order_shipping)*100,0),
-					'type' => 2
-				);
-				$total_amount += $product['price'] * $product['count'];
-				array_push($products, $product);				
+			$shipping_items = $order->get_items( 'shipping' );
+			foreach ($shipping_items as $item_id => $s_item) {
+				$s_total = floatval($s_item->get_total());
+
+				if($s_total > 0)
+				{
+					$tax_data = $s_item->get_taxes();
+					$s_total_tax = 0;
+
+					if(!empty($tax_data['total']))
+					{
+						foreach ($tax_data['total'] as $tax_amount) {
+							$s_total_tax += (float) $tax_amount;
+						}
+					}
+
+					$s_tax_rate = $s_total_tax / $s_total * 100;
+
+					$product = array(
+						'title' => $s_item->get_name(),
+						'id' => $s_item->get_method_id(),
+						'count' => 1,
+						'pretax_price' => round($s_total * 100),
+						'price' => round(($s_total + $s_total_tax) * 100),
+						'tax' => round($s_tax_rate, 1),
+						'type' => 2
+					);
+
+					$total_amount += $product['price'] * $product['count'];
+					array_push($products, $product);
+				}
 			}
 
 			if($this->send_items == 'yes' && abs($total_amount - $amount) < 9)
