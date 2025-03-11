@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/visma-pay-payment-"
 "gateway\n"
 "POT-Creation-Date: 2023-10-03T13:10:45+00:00\n"
-"PO-Revision-Date: 2023-10-03 16:12+0300\n"
+"PO-Revision-Date: 2025-03-06 14:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: Suomi\n"
 "Language: fi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.5\n"
 "X-Loco-Version: 2.5.2; wp-5.8\n"
 
 #. Plugin Name of the plugin
@@ -83,7 +83,7 @@ msgstr ""
 
 #: visma-pay-payment-gateway.php:177
 msgid "Second part of description"
-msgstr "Kuvauksen toinen osa."
+msgstr "Kuvauksen toinen osa"
 
 #: visma-pay-payment-gateway.php:178
 msgid ""
@@ -93,7 +93,7 @@ msgstr "Kassasivulla näkyvä maksutavan kuvauksen toinen osa (ohjeistus)."
 
 #: visma-pay-payment-gateway.php:180
 msgid "Choose your payment method and click Pay for Order"
-msgstr "Valitse maksutapa ja klikkaa Lähetä Tilaus -painiketta."
+msgstr "Valitse maksutapa ja klikkaa Lähetä Tilaus -painiketta"
 
 #: visma-pay-payment-gateway.php:183
 msgid "Private key"
@@ -168,7 +168,7 @@ msgid ""
 "order again. "
 msgstr ""
 "Maksa Tilaus: Siirtää asiakkaan sivulle jossa hän voi yrittää uudelleen "
-"maksamattoman tilauksensa maksamista."
+"maksamattoman tilauksensa maksamista. "
 
 #: visma-pay-payment-gateway.php:223
 msgid "Cart: Customer is redirected back to the shopping cart."
@@ -268,7 +268,7 @@ msgstr "Ota Alisa Yrityslasku käyttöön maksusivulla."
 
 #: visma-pay-payment-gateway.php:330 build/blocks.js:1
 msgid "No payment methods available for the currency: "
-msgstr "Ei tuettuja maksutapoja valuutalle:"
+msgstr "Ei tuettuja maksutapoja valuutalle: "
 
 #: visma-pay-payment-gateway.php:344 build/blocks.js:1
 msgid "Internet banking"
@@ -289,7 +289,7 @@ msgstr "Lasku tai osamaksu"
 #: visma-pay-payment-gateway.php:700 visma-pay-payment-gateway.php:701
 #: visma-pay-payment-gateway.php:716
 msgid "Visma Pay: No payment methods available for the currency: "
-msgstr "Visma Pay: Ei sallittuja maksutapoja valuutalle:"
+msgstr "Visma Pay: Ei sallittuja maksutapoja valuutalle: "
 
 #: visma-pay-payment-gateway.php:714
 msgid ""
@@ -297,7 +297,7 @@ msgid ""
 "EUR for order: "
 msgstr ""
 "Visma Pay: \"Salli maksaminen vain euroilla\"-asetus on käytössä ja valuutta "
-"ei ollut EUR tilauksessa:"
+"ei ollut EUR tilauksessa: "
 
 #: visma-pay-payment-gateway.php:739 visma-pay-payment-gateway.php:901
 #: visma-pay-payment-gateway.php:904
@@ -408,7 +408,7 @@ msgid ""
 "payment gateway refused to settle payment for given transaction."
 msgstr ""
 "Maksua ei voitu veloittaa. Joko maksu on jo veloitettu, tai luottolaitos "
-"hylkäsi veloituspyynnön"
+"hylkäsi veloituspyynnön."
 
 #: visma-pay-payment-gateway.php:1062
 msgid "Settlement failed. Unknown error."

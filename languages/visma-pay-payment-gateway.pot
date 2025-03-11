@@ -1,410 +1,407 @@
-# Copyright (C) 2023 Visma
+# Copyright (C) 2025 Visma
 # This file is distributed under the same license as the Visma Pay Payment Gateway plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visma Pay Payment Gateway 1.1.2\n"
+"Project-Id-Version: Visma Pay Payment Gateway 1.1.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/visma-pay-payment-gateway\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-10-03T13:10:45+00:00\n"
+"POT-Creation-Date: 2025-03-06T12:17:39+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: visma-pay-payment-gateway\n"
 
 #. Plugin Name of the plugin
+#: visma-pay-payment-gateway.php
 msgid "Visma Pay Payment Gateway"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: visma-pay-payment-gateway.php
 msgid "https://www.vismapay.com/docs"
 msgstr ""
 
 #. Description of the plugin
+#: visma-pay-payment-gateway.php
 msgid "Visma Pay Payment Gateway Integration for Woocommerce"
 msgstr ""
 
 #. Author of the plugin
+#: visma-pay-payment-gateway.php
 msgid "Visma"
 msgstr ""
 
 #. Author URI of the plugin
+#: visma-pay-payment-gateway.php
 msgid "https://www.visma.fi/vismapay/"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:80
-#: visma-pay-payment-gateway.php:168
+#: visma-pay-payment-gateway.php:79
+#: visma-pay-payment-gateway.php:166
 msgid "Visma Pay"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:81
+#: visma-pay-payment-gateway.php:80
 msgid "Visma Pay Payment API integration for Woocommerce"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:154
+#: visma-pay-payment-gateway.php:152
 msgid "General options"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:159
+#: visma-pay-payment-gateway.php:157
 msgid "Enable/Disable"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:161
+#: visma-pay-payment-gateway.php:159
 msgid "Enable Visma Pay"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:165
+#: visma-pay-payment-gateway.php:163
 msgid "Title"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:167
+#: visma-pay-payment-gateway.php:165
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:171
+#: visma-pay-payment-gateway.php:169
 msgid "Description"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:172
+#: visma-pay-payment-gateway.php:170
 msgid "This controls the first part of the description which the user sees during checkout."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:174
+#: visma-pay-payment-gateway.php:172
 msgid "Pay safely with Finnish internet banking, payment cards, wallet services or credit invoices."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:177
+#: visma-pay-payment-gateway.php:175
 msgid "Second part of description"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:178
+#: visma-pay-payment-gateway.php:176
 msgid "This controls the second part of the description which the user sees during checkout."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:180
+#: visma-pay-payment-gateway.php:178
 msgid "Choose your payment method and click Pay for Order"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:183
+#: visma-pay-payment-gateway.php:181
 msgid "Private key"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:185
+#: visma-pay-payment-gateway.php:183
 msgid "Private key of the sub-merchant"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:189
+#: visma-pay-payment-gateway.php:187
 msgid "API key"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:191
+#: visma-pay-payment-gateway.php:189
 msgid "API key of the sub-merchant"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:195
+#: visma-pay-payment-gateway.php:193
 msgid "Order number prefix"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:197
+#: visma-pay-payment-gateway.php:195
 msgid "Prefix to avoid order number duplication"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:201
+#: visma-pay-payment-gateway.php:199
 msgid "Send products"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:203
+#: visma-pay-payment-gateway.php:201
 msgid "Send product breakdown to Visma Pay."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:207
+#: visma-pay-payment-gateway.php:205
 msgid "Send payment confirmation"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:209
+#: visma-pay-payment-gateway.php:207
 msgid "Send Visma Pay's payment confirmation email to the customer's billing e-mail."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:217
+#: visma-pay-payment-gateway.php:215
 msgid "Cancel Page"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:220
+#: visma-pay-payment-gateway.php:218
 msgid "Choose the page where the customer is redirected after a canceled/failed payment."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:221
+#: visma-pay-payment-gateway.php:219
 msgid "Order Received: Shows the customer information about their order and a notice that the payment failed. Customer has an opportunity to try payment again."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:222
+#: visma-pay-payment-gateway.php:220
 msgid "Pay for Order: Returns user to a page where they can try to pay their unpaid order again. "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:223
+#: visma-pay-payment-gateway.php:221
 msgid "Cart: Customer is redirected back to the shopping cart."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:224
+#: visma-pay-payment-gateway.php:222
 msgid "Checkout: Customer is redirected back to the checkout."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:225
+#: visma-pay-payment-gateway.php:223
 msgid "(When using Cart or Checkout as the return page for failed orders, the customer's cart will not be emptied during checkout.)"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:228
+#: visma-pay-payment-gateway.php:226
 msgid "Order Received"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:229
+#: visma-pay-payment-gateway.php:227
 msgid "Pay for Order"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:230
+#: visma-pay-payment-gateway.php:228
 msgid "Cart"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:231
+#: visma-pay-payment-gateway.php:229
 msgid "Checkout"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:238
+#: visma-pay-payment-gateway.php:236
 msgid "Only allow payments in EUR"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:240
+#: visma-pay-payment-gateway.php:238
 msgid "Enable this option if you want to allow payments only in EUR."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:244
+#: visma-pay-payment-gateway.php:242
 msgid "Enable payment method embedding"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:246
+#: visma-pay-payment-gateway.php:244
 msgid "Enable this if you want to embed the payment methods to the checkout-page."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:252
+#: visma-pay-payment-gateway.php:250
 msgid "Manage payment methods"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:257
+#: visma-pay-payment-gateway.php:255
 msgid "Banks"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:259
+#: visma-pay-payment-gateway.php:257
 msgid "Enable bank payments in the Visma Pay payment page."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:263
+#: visma-pay-payment-gateway.php:261
 msgid "Wallets"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:265
+#: visma-pay-payment-gateway.php:263
 msgid "Enable wallet services in the Visma Pay payment page."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:269
+#: visma-pay-payment-gateway.php:267
 msgid "Card payments"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:271
+#: visma-pay-payment-gateway.php:269
 msgid "Enable credit cards in the Visma Pay payment page."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:275
+#: visma-pay-payment-gateway.php:273
 msgid "Credit invoices"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:277
+#: visma-pay-payment-gateway.php:275
 msgid "Enable credit invoices in the Visma Pay payment page."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:281
-msgid "Alisa Yrityslasku"
-msgstr ""
-
-#: visma-pay-payment-gateway.php:283
-msgid "Enable Alisa Yrityslasku in the Visma Pay payment page."
-msgstr ""
-
-#: visma-pay-payment-gateway.php:330
+#: visma-pay-payment-gateway.php:315
 #: build/blocks.js:1
 msgid "No payment methods available for the currency: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:344
+#: visma-pay-payment-gateway.php:329
 #: build/blocks.js:1
 msgid "Internet banking"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:347
+#: visma-pay-payment-gateway.php:332
 #: build/blocks.js:1
 msgid "Payment card"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:350
+#: visma-pay-payment-gateway.php:335
 #: build/blocks.js:1
 msgid "Wallet services"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:353
+#: visma-pay-payment-gateway.php:338
 #: build/blocks.js:1
 msgid "Invoice or part payment"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:700
-#: visma-pay-payment-gateway.php:701
-#: visma-pay-payment-gateway.php:716
+#: visma-pay-payment-gateway.php:686
+#: visma-pay-payment-gateway.php:687
+#: visma-pay-payment-gateway.php:702
 msgid "Visma Pay: No payment methods available for the currency: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:714
+#: visma-pay-payment-gateway.php:700
 msgid "Visma Pay: \"Only allow payments in EUR\" is enabled and currency was not EUR for order: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:739
-#: visma-pay-payment-gateway.php:901
-#: visma-pay-payment-gateway.php:904
+#: visma-pay-payment-gateway.php:725
+#: visma-pay-payment-gateway.php:886
+#: visma-pay-payment-gateway.php:889
 msgid "Visma Pay order"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:739
+#: visma-pay-payment-gateway.php:725
 msgid "Payment pending. Waiting for result."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:762
+#: visma-pay-payment-gateway.php:748
 msgid "Visma Pay system is currently in maintenance. Please try again in a few minutes."
 msgstr ""
 
+#: visma-pay-payment-gateway.php:755
 #: visma-pay-payment-gateway.php:769
-#: visma-pay-payment-gateway.php:783
 msgid "Payment failed due to an error."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:866
+#: visma-pay-payment-gateway.php:851
 msgid "Payment method: Card payment"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:867
+#: visma-pay-payment-gateway.php:852
 msgid "Card payment info: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:872
+#: visma-pay-payment-gateway.php:857
 msgid "Verified: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:875
+#: visma-pay-payment-gateway.php:860
 msgid "Card country: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:876
+#: visma-pay-payment-gateway.php:861
 msgid "Client IP country: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:881
+#: visma-pay-payment-gateway.php:866
 msgid "Error: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:885
+#: visma-pay-payment-gateway.php:870
 msgid "Payment method: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:901
+#: visma-pay-payment-gateway.php:886
 msgid "Payment is authorized. Use settle option to capture funds."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:904
+#: visma-pay-payment-gateway.php:889
 msgid "Payment accepted."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:916
+#: visma-pay-payment-gateway.php:901
 msgid "Payment was not accepted."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:924
+#: visma-pay-payment-gateway.php:909
 msgid "Transaction status could not be updated after customer returned from the web page of a bank. Please use the merchant UI to resolve the payment status."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:932
+#: visma-pay-payment-gateway.php:917
 msgid "Maintenance break. The transaction is not created and the user has been notified and transferred back to the cancel address."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:964
+#: visma-pay-payment-gateway.php:949
 msgid "Card payment failed. Your card has not been charged."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:966
+#: visma-pay-payment-gateway.php:951
 msgid "Payment was canceled or charge was not accepted."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1011
+#: visma-pay-payment-gateway.php:996
 msgid "Payment settled."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1029
+#: visma-pay-payment-gateway.php:1014
 msgid "Settle payment"
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1053
+#: visma-pay-payment-gateway.php:1038
 msgid "Settlement was successful."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1056
+#: visma-pay-payment-gateway.php:1041
 msgid "Settlement failed. Validation failed."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1059
+#: visma-pay-payment-gateway.php:1044
 msgid "Settlement failed. Either the payment has already been settled or the payment gateway refused to settle payment for given transaction."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1062
+#: visma-pay-payment-gateway.php:1047
 msgid "Settlement failed. Unknown error."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1069
+#: visma-pay-payment-gateway.php:1054
 msgid "Exception, error: "
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1116
+#: visma-pay-payment-gateway.php:1101
 msgid "The card is reported lost or stolen."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1118
+#: visma-pay-payment-gateway.php:1103
 msgid "General decline. The card holder should contact the issuer to find out why the payment failed."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1120
+#: visma-pay-payment-gateway.php:1105
 msgid "Insufficient funds. The card holder should verify that there is balance on the account and the online payments are actived."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1122
+#: visma-pay-payment-gateway.php:1107
 msgid "Expired card."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1124
+#: visma-pay-payment-gateway.php:1109
 msgid "Withdrawal amount limit exceeded."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1126
+#: visma-pay-payment-gateway.php:1111
 msgid "Restricted card. The card holder should verify that the online payments are actived."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1128
+#: visma-pay-payment-gateway.php:1113
 msgid "Timeout communicating with the acquirer. The payment should be tried again later."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1139
+#: visma-pay-payment-gateway.php:1124
 msgid "3-D Secure was used."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1141
+#: visma-pay-payment-gateway.php:1126
 msgid "3-D Secure was not used."
 msgstr ""
 
-#: visma-pay-payment-gateway.php:1143
+#: visma-pay-payment-gateway.php:1128
 msgid "3-D Secure was attempted but not supported by the card issuer or the card holder is not participating."
 msgstr ""

@@ -3,13 +3,13 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.1.5
+ * Version: 1.1.6
  * Author: Visma
  * Author URI: https://www.visma.fi/vismapay/
  * Text Domain: visma-pay-payment-gateway
  * Domain Path: /languages
  * WC requires at least: 3.0.0
- * WC tested up to: 9.1.4
+ * WC tested up to: 9.7.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -64,7 +64,6 @@ function init_visma_pay_gateway()
 		protected $wallets;
 		protected $ccards;
 		protected $cinvoices;
-		protected $laskuyritykselle;
 		protected $send_items;
 		protected $send_receipt;
 		protected $embed;
@@ -97,7 +96,6 @@ function init_visma_pay_gateway()
 			$this->wallets = $this->get_option('wallets');
 			$this->ccards = $this->get_option('ccards');
 			$this->cinvoices = $this->get_option('cinvoices');
-			$this->laskuyritykselle = $this->get_option('laskuyritykselle');
 
 			$this->send_items = $this->get_option('send_items');
 			$this->send_receipt = $this->get_option('send_receipt');
@@ -277,12 +275,6 @@ function init_visma_pay_gateway()
 					'label' => __( 'Enable credit invoices in the Visma Pay payment page.', 'visma-pay-payment-gateway' ),
 					'default' => 'yes'
 				),
-				'laskuyritykselle' => array(
-					'title' => __( 'Alisa Yrityslasku', 'visma-pay-payment-gateway' ),
-					'type' => 'checkbox',
-					'label' => __( 'Enable Alisa Yrityslasku in the Visma Pay payment page.', 'visma-pay-payment-gateway' ),
-					'default' => 'no'
-				)
 			));
 		}
 
@@ -313,14 +305,7 @@ function init_visma_pay_gateway()
 						}
 						else if($method->group == 'creditinvoices')
 						{
-							if($method->selected_value == 'laskuyritykselle')
-							{
-								$creditinvoices .= '<div id="visma-pay-button-' . $method->selected_value . '" class="bank-button"><img alt="' . $method->name . '" src="' . $method->img_src . '"/></div>';
-							}
-							else
-							{
-								$creditinvoices .= '<div id="visma-pay-button-' . $method->selected_value . '" class="bank-button"><img alt="' . $method->name . '" src="' . $method->img_src . '"/></div>';
-							}
+							$creditinvoices .= '<div id="visma-pay-button-' . $method->selected_value . '" class="bank-button"><img alt="' . $method->name . '" src="' . $method->img_src . '"/></div>';
 						}
 					}
 				}
@@ -441,14 +426,7 @@ function init_visma_pay_gateway()
 						continue;
 					}
 
-					if($method->selected_value == 'laskuyritykselle')
-					{
-						if($this->laskuyritykselle == 'no')
-						{
-							continue;
-						}
-					}
-					else if($this->cinvoices == 'no')
+					if($this->cinvoices == 'no')
 					{
 						continue;
 					}
@@ -480,7 +458,6 @@ function init_visma_pay_gateway()
 			);
 
 			$order = new WC_Order($order_id);
-			$wc_order_id = $order->get_id();
 			$wc_order_total = $order->get_total();
 
 			$wc_b_first_name = $order->get_billing_first_name();
@@ -662,8 +639,6 @@ function init_visma_pay_gateway()
 						$vp_selected[] = 'creditcards';
 					if($this->cinvoices == 'yes')
 						$vp_selected[] = 'creditinvoices';
-					if($this->laskuyritykselle == 'yes')
-						$vp_selected[] = 'laskuyritykselle';
 				}
 				else if($this->limit_currencies == 'no')
 				{
@@ -697,14 +672,7 @@ function init_visma_pay_gateway()
 									}
 									else if($method->group == 'creditinvoices')
 									{
-										if($method->selected_value == 'laskuyritykselle' && ((!isset($order) && $cart_total >= $method->min_amount && $cart_total <= $method->max_amount) || ($total >= $method->min_amount && $total <= $method->max_amount)))
-										{
-											if($this->laskuyritykselle == 'yes')
-											{
-												$vp_selected[] = $method->selected_value;
-											}
-										} 
-										else if($this->cinvoices == 'yes' && ((!isset($order) && $cart_total >= $method->min_amount && $cart_total <= $method->max_amount) || ($total >= $method->min_amount && $total <= $method->max_amount)))
+										if($this->cinvoices == 'yes' && ((!isset($order) && $cart_total >= $method->min_amount && $cart_total <= $method->max_amount) || ($total >= $method->min_amount && $total <= $method->max_amount)))
 										{
 											$vp_selected[] = $method->selected_value;
 										}
@@ -863,7 +831,6 @@ function init_visma_pay_gateway()
 				if($order === null)
 					$this->visma_pay_die("Order not found.");
 
-				$wc_order_id = $order->get_id();
 				$wc_order_status = $order->get_status();
 
 				if($authcode_confirm === $authcode && $order)
