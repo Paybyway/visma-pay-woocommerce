@@ -3,12 +3,12 @@ Contributors: hsuvant
 Donate link:
 Tags: payment gateway, visma, pay, verkkomaksut, pankit, vismapay
 Requires at least: 3.3
-Tested up to: 6.7.2
+Tested up to: 6.9
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-WC requires at least: 3.0.0
-WC tested up to: 9.7.1
+WC requires at least: 3.3.0
+WC tested up to: 10.4.2
 
 Visma Pay plugin for Woocommerce.
 
@@ -38,6 +38,10 @@ Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, H
 
 
 == Changelog ==
+
+= 1.2.0 =
+* Updated 'tested up to' versions.
+* Added new option to automatically capture payments of Completed orders. Normally payments are always captured instantly once they're accepted, but if a merchant chooses to use separate capture for their payments or if a payment methods does not support instant capture, then using this setting will cause payments to be captured once the order status is changed to Completed.
 
 = 1.1.6 =
 * Updated 'tested up to' versions.

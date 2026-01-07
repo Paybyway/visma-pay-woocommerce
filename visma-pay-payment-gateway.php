@@ -3,13 +3,13 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.1.6
+ * Version: 1.2.0
  * Author: Visma
  * Author URI: https://www.visma.fi/vismapay/
  * Text Domain: visma-pay-payment-gateway
  * Domain Path: /languages
- * WC requires at least: 3.0.0
- * WC tested up to: 9.7.1
+ * WC requires at least: 3.3.0
+ * WC tested up to: 10.4.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -58,6 +58,7 @@ function init_visma_pay_gateway()
 	{
 		protected $api_key;
 		protected $private_key;
+		protected $api_url;
 		protected $ordernumber_prefix;
 		protected $payment_description;
 		protected $banks;
@@ -71,13 +72,15 @@ function init_visma_pay_gateway()
 		protected $limit_currencies;
 		protected $logger;
 		protected $logcontext;
+		protected $auto_capture;
 
-		function __construct()
+		public function __construct()
 		{
 			$this->id = 'visma_pay';
 			$this->has_fields = true;
 			$this->method_title = __( 'Visma Pay', 'visma-pay-payment-gateway' );
 			$this->method_description = __( 'Visma Pay Payment API integration for Woocommerce', 'visma-pay-payment-gateway' );
+			$this->api_url = 'https://www.vismapay.com';
 
 			$this->init_form_fields();
 			$this->init_settings();
@@ -103,6 +106,7 @@ function init_visma_pay_gateway()
 
 			$this->cancel_url = $this->get_option('cancel_url');
 			$this->limit_currencies = $this->get_option('limit_currencies');
+			$this->auto_capture = $this->get_option('auto_capture');
 
 			$this->logger = wc_get_logger();
 			$this->logcontext = array('source' => 'visma-pay-payment-gateway');
@@ -111,31 +115,32 @@ function init_visma_pay_gateway()
 			add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options' ) );
 			add_action('woocommerce_api_wc_gateway_visma_pay', array($this, 'check_visma_pay_response' ) );
 			add_action('woocommerce_admin_order_data_after_billing_address', array($this, 'visma_pay_settle_payment'), 1, 1);
+			add_action('woocommerce_order_status_completed', array($this, 'visma_pay_order_completed'));
 
 			if(!$this->is_valid_currency() && $this->limit_currencies == 'yes')
 				$this->enabled = false;
 		}
 
-		function is_embed() {
+		public function is_embed() {
 			return $this->embed == 'yes';
 		}
 
-		static function plugin_url()
+		public static function plugin_url()
 		{
 			return untrailingslashit(plugins_url( '/', __FILE__ ));
 		}
 	
-		static function plugin_abspath()
+		public static function plugin_abspath()
 		{
 			return trailingslashit(plugin_dir_path( __FILE__ ));
 		}
 
-		function is_valid_currency()
+		public function is_valid_currency()
 		{	
 			return in_array(get_woocommerce_currency(), array('EUR'));
 		}
 
-		function payment_scripts() {
+		public function payment_scripts() {
 			if (!is_checkout())
 				return;
 
@@ -145,7 +150,7 @@ function init_visma_pay_gateway()
 			wp_enqueue_script( 'woocommerce_visma_pay', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) . '/assets/js/vismapay.js', array( 'jquery' ), '', true );
 		}
 
-		function init_form_fields()
+		public function init_form_fields()
 		{
 			$this->form_fields = array(
 				'general' => array(
@@ -206,12 +211,8 @@ function init_visma_pay_gateway()
 					'type' => 'checkbox',
 					'label' => __( "Send Visma Pay's payment confirmation email to the customer's billing e-mail.", 'visma-pay-payment-gateway' ),
 					'default' => 'yes',
-				)
-			);
-
-			if (version_compare(WOOCOMMERCE_VERSION, '2.1.0', '>='))
-			{
-				$this->form_fields['cancel_url'] = array(
+				),
+				'cancel_url' => array(
 					'title' => __( 'Cancel Page', 'visma-pay-payment-gateway' ),
 					'type' => 'select',
 					'description' => 
@@ -228,10 +229,14 @@ function init_visma_pay_gateway()
 						'order_new_cart' => __('Cart', 'visma-pay-payment-gateway'),
 						'order_new_checkout' => __('Checkout', 'visma-pay-payment-gateway')
 					)
-				);
-			}
-
-			$this->form_fields = array_merge($this->form_fields, array(
+				),
+				'auto_capture' => array(
+					'title' => __( 'Automatically capture payments of Completed orders', 'visma-pay-payment-gateway' ),
+					'type' => 'checkbox',
+					'label' => __( 'Enable this option to capture authorized payments when order status is changed to "Completed".', 'visma-pay-payment-gateway' ),
+					'description' => __( 'Normally payments are always captured instantly once they are accepted, but if a merchant chooses to use separate capture for their payments or if a payment method does not support instant capture, then using this setting will cause payments to be captured once the order status is changed to Completed.', 'visma-pay-payment-gateway' ),
+					'default' => 'no',
+				),
 				'limit_currencies' => array(
 					'title' => __( 'Only allow payments in EUR', 'visma-pay-payment-gateway' ),
 					'type' => 'checkbox',
@@ -275,10 +280,10 @@ function init_visma_pay_gateway()
 					'label' => __( 'Enable credit invoices in the Visma Pay payment page.', 'visma-pay-payment-gateway' ),
 					'default' => 'yes'
 				),
-			));
+			);
 		}
 
-		function payment_fields()
+		public function payment_fields()
 		{
 			if($this->embed == 'yes')
 			{
@@ -347,9 +352,9 @@ function init_visma_pay_gateway()
 				echo wpautop(wptexturize($this->description));
 		}
 
-		function visma_pay_get_merchant_payment_methods()
+		public function visma_pay_get_merchant_payment_methods()
 		{
-			include(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
+			require_once(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
 			$visma_pay = new Visma\VismaPay($this->api_key, $this->private_key);
 
 			try
@@ -366,7 +371,7 @@ function init_visma_pay_gateway()
 							if($method->group == 'creditcards')
 								$key = strtolower($method->name);
 
-							$img = $this->visma_pay_save_img($key, $method->img, $method->img_timestamp);
+							$img = $this->visma_pay_save_img($key, $method->img);
 							$method->img_src = $img;
 						}
 
@@ -383,26 +388,26 @@ function init_visma_pay_gateway()
 			return false;
 		}
 
-		function visma_pay_filter_payment_methods($payment_methods)
+		public function visma_pay_filter_payment_methods($payment_methods)
 		{
 			$filtered_methods = [];
 			$plugin_url = untrailingslashit(plugins_url(basename(plugin_dir_path(__FILE__)), basename(__FILE__))) . '/';
 
 			$total = 0;
-			
+
 			$wc_cart_total = WC()->cart->total;
 			$cart_total = (int)(round($wc_cart_total*100, 0));
 
 			if(get_query_var('order-pay') != '')
 			{
-				$order = new WC_Order(get_query_var('order-pay'));
+				$order = wc_get_order(get_query_var('order-pay'));
 				$wc_order_total = $order->get_total();
 				$total = (int)(round($wc_order_total*100, 0));
 			}
 
 			foreach ($payment_methods as $method)
 			{
-				if($method->group == 'creditcards'  && $this->ccards == 'no')
+				if($method->group == 'creditcards' && $this->ccards == 'no')
 				{
 					continue;
 				}
@@ -447,7 +452,7 @@ function init_visma_pay_gateway()
 			return $filtered_methods;
 		}
 
-		function process_payment($order_id)
+		public function process_payment($order_id)
 		{
 			if (sanitize_key($_POST['payment_method']) != 'visma_pay')
 				return false;
@@ -457,7 +462,7 @@ function init_visma_pay_gateway()
 				'redirect' => '' // expected but not used in failure case
 			);
 
-			$order = new WC_Order($order_id);
+			$order = wc_get_order($order_id);
 			$wc_order_total = $order->get_total();
 
 			$wc_b_first_name = $order->get_billing_first_name();
@@ -482,7 +487,7 @@ function init_visma_pay_gateway()
 			$order_number = (strlen($this->ordernumber_prefix)  > 0) ?  $this->ordernumber_prefix. '_'  .$order_id : $order_id;
 			$order_number .=  '-' . str_pad(time().rand(0,9999), 5, "1", STR_PAD_RIGHT);
 
-			include_once(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
+			require_once(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
 
 			$redirect_url = $this->get_return_url($order);
 			$return_url = add_query_arg( array('wc-api' => get_class( $this ) ,'order_id' => $order_id), $redirect_url );
@@ -523,19 +528,19 @@ function init_visma_pay_gateway()
 
 			$payment->addCustomer(
 				array(
-					'firstname' => htmlspecialchars($wc_b_first_name),
-					'lastname' => htmlspecialchars($wc_b_last_name),
-					'email' => htmlspecialchars($wc_b_email),
-					'address_street' => trim(htmlspecialchars($wc_b_address_1.' '.$wc_b_address_2)),
-					'address_city' => htmlspecialchars($wc_b_city),
-					'address_zip' => htmlspecialchars($wc_b_postcode),
-					'address_country' => htmlspecialchars($wc_b_country),
-					'shipping_firstname' => htmlspecialchars($wc_s_first_name),
-					'shipping_lastname' => htmlspecialchars($wc_s_last_name),
-					'shipping_address_street' => trim(htmlspecialchars($wc_s_address_1.' '.$wc_s_address_2)),
-					'shipping_address_city' => htmlspecialchars($wc_s_city),
-					'shipping_address_zip' => htmlspecialchars($wc_s_postcode),
-					'shipping_address_country' => htmlspecialchars($wc_s_country),
+					'firstname' => $wc_b_first_name,
+					'lastname' => $wc_b_last_name,
+					'email' => $wc_b_email,
+					'address_street' => trim($wc_b_address_1 . ' ' . $wc_b_address_2),
+					'address_city' => $wc_b_city,
+					'address_zip' => $wc_b_postcode,
+					'address_country' => $wc_b_country,
+					'shipping_firstname' => $wc_s_first_name,
+					'shipping_lastname' => $wc_s_last_name,
+					'shipping_address_street' => trim($wc_s_address_1 . ' ' . $wc_s_address_2),
+					'shipping_address_city' => $wc_s_city,
+					'shipping_address_zip' => $wc_s_postcode,
+					'shipping_address_country' => $wc_s_country,
 					'phone' => preg_replace('/[^0-9+ ]/', '', $wc_b_phone)
 				)
 			);
@@ -543,8 +548,11 @@ function init_visma_pay_gateway()
 			$products = array();
 			$total_amount = 0;
 			$order_items = $order->get_items();
-			foreach($order_items as $item) {
+
+			foreach($order_items as $item)
+			{
 				$tax_rates = WC_Tax::get_rates($item->get_tax_class());
+
 				if(!empty($tax_rates))
 				{
 					$tax_rate = reset($tax_rates);
@@ -572,7 +580,9 @@ function init_visma_pay_gateway()
 		 	}
 
 			$shipping_items = $order->get_items( 'shipping' );
-			foreach ($shipping_items as $item_id => $s_item) {
+
+			foreach ($shipping_items as $s_item)
+			{
 				$s_total = floatval($s_item->get_total());
 
 				if($s_total > 0)
@@ -582,7 +592,8 @@ function init_visma_pay_gateway()
 
 					if(!empty($tax_data['total']))
 					{
-						foreach ($tax_data['total'] as $tax_amount) {
+						foreach ($tax_data['total'] as $tax_amount)
+						{
 							$s_total_tax += (float) $tax_amount;
 						}
 					}
@@ -610,8 +621,8 @@ function init_visma_pay_gateway()
 				{
 					$payment->addProduct(
 						array(
-							'id' => htmlspecialchars($product['id']),
-							'title' => htmlspecialchars($product['title']),
+							'id' => $product['id'],
+							'title' => $product['title'],
 							'count' => $product['count'],
 							'pretax_price' => $product['pretax_price'],
 							'tax' => $product['tax'],
@@ -625,10 +636,13 @@ function init_visma_pay_gateway()
 			$vp_selected = '';
 
 			if($this->embed == 'yes' && !empty($visma_pay_selected_bank))
+			{
 				$vp_selected = array($visma_pay_selected_bank);
+			}
 			else
 			{
 				$vp_selected = array();
+
 				if($this->is_valid_currency())
 				{
 					if($this->banks == 'yes')
@@ -642,8 +656,9 @@ function init_visma_pay_gateway()
 				}
 				else if($this->limit_currencies == 'no')
 				{
-					include(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
+					require_once(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
 					$payment_methods = new Visma\VismaPay($this->api_key, $this->private_key);
+
 					try
 					{
 						$response = $payment_methods->getMerchantPaymentMethods(get_woocommerce_currency());
@@ -654,13 +669,9 @@ function init_visma_pay_gateway()
 							{
 								foreach ($response->payment_methods as $method)
 								{
-									$key = $method->selected_value;
-									if($method->group == 'creditcards')
-										$key = strtolower($method->name);
-
 									if($method->group == 'creditcards'  && $this->ccards == 'yes')
 									{
-										$vp_selected[] = $method->group; //creditcards
+										$vp_selected[] = $method->group;
 									}
 									else if($method->group == 'wallets' && $this->wallets == 'yes')
 									{
@@ -670,9 +681,9 @@ function init_visma_pay_gateway()
 									{
 										$vp_selected[] = $method->selected_value;
 									}
-									else if($method->group == 'creditinvoices')
+									else if($method->group == 'creditinvoices' && $this->cinvoices == 'yes')
 									{
-										if($this->cinvoices == 'yes' && ((!isset($order) && $cart_total >= $method->min_amount && $cart_total <= $method->max_amount) || ($total >= $method->min_amount && $total <= $method->max_amount)))
+										if($amount >= $method->min_amount && $amount <= $method->max_amount)
 										{
 											$vp_selected[] = $method->selected_value;
 										}
@@ -686,6 +697,8 @@ function init_visma_pay_gateway()
 								wc_add_notice(__('Visma Pay: No payment methods available for the currency: ', 'visma-pay-payment-gateway') . get_woocommerce_currency(), 'error');
 								$order_number_text = __('Visma Pay: No payment methods available for the currency: ', 'visma-pay-payment-gateway') .  get_woocommerce_currency();
 								$order->add_order_note($order_number_text);
+								$order->save();
+
 								return $return;
 							}
 						}
@@ -701,6 +714,8 @@ function init_visma_pay_gateway()
 					$this->logger->info($error_text, $this->logcontext);
 					wc_add_notice(__('Visma Pay: No payment methods available for the currency: ', 'visma-pay-payment-gateway') . get_woocommerce_currency(), 'notice');
 					$order->add_order_note($error_text . $order_number);
+					$order->save();
+
 					return $return;
 				}
 			}
@@ -772,9 +787,9 @@ function init_visma_pay_gateway()
 			}
 		}
 
-		function get_order_by_id_and_order_number($order_id, $order_number)
+		private function get_order_by_id_and_order_number($order_id, $order_number)
 		{
-			$order = New WC_Order($order_id);
+			$order = wc_get_order($order_id);
 			$order_numbers = $order->get_meta('visma_pay_order_numbers', true, 'edit');
 
 			if(!$order_numbers)
@@ -783,13 +798,15 @@ function init_visma_pay_gateway()
 				$order_numbers = array($current_order_number);
 			}
 
-			if(in_array($order_number, $order_numbers, true));
+			if(in_array($order_number, $order_numbers, true))
+			{
 				return $order;
+			}
 
 			return null;
 		}
 
-		protected function sanitize_visma_pay_order_number($order_number)
+		private function sanitize_visma_pay_order_number($order_number)
 		{
 			if (function_exists('mb_ereg_replace')) {
 				return mb_ereg_replace('/[^\-\p{L}\p{N}_\s@&\/\\()?!=+£$€.,;:*%]/', '', $order_number);
@@ -797,7 +814,7 @@ function init_visma_pay_gateway()
 			return preg_replace('/[^\-\p{L}\p{N}_\s@&\/\\()?!=+£$€.,;:*%]/', '', $order_number);
 		}
 
-		function check_visma_pay_response()
+		public function check_visma_pay_response()
 		{
 			if(count($_GET))
 			{
@@ -841,7 +858,7 @@ function init_visma_pay_gateway()
 					{
 						$pbw_extra_info = '';
 
-						include_once(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
+						require_once(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
 						$payment = new Visma\VismaPay($this->api_key, $this->private_key);
 						try
 						{
@@ -937,93 +954,97 @@ function init_visma_pay_gateway()
 			}
 		}
 
-		function visma_pay_url($return_code, $order, $cancel_url_option = '', $card = false)
+		private function visma_pay_url($return_code, $order, $cancel_url_option = '', $card = false)
 		{
-			if (version_compare(WOOCOMMERCE_VERSION, '2.1.0', '>='))
+			if($return_code == 0)
 			{
-				if($return_code == 0)
-					$redirect_url = $this->get_return_url($order);
-				else
-				{
-					if($card)
-						$error_msg = __('Card payment failed. Your card has not been charged.', 'visma-pay-payment-gateway');
-					else
-						$error_msg = __('Payment was canceled or charge was not accepted.', 'visma-pay-payment-gateway');
-					switch ($cancel_url_option)
-					{
-						case 'order_pay':
-							do_action( 'woocommerce_set_cart_cookies',  true );
-							$redirect_url = $order->get_checkout_payment_url();
-							break;
-						case 'order_new_cart':
-							$redirect_url = wc_get_cart_url();
-							break;
-						case 'order_new_checkout':
-							$redirect_url = wc_get_checkout_url();
-							break;
-						default:
-							do_action( 'woocommerce_set_cart_cookies',  true );
-							$redirect_url = $this->get_return_url($order);
-							break;
-					}
-					wc_add_notice($error_msg, 'error');
-				}
+				$redirect_url = $this->get_return_url($order);
 			}
 			else
-				$redirect_url = (get_option('woocommerce_thanks_page_id') != '' ) ? get_permalink(get_option('woocommerce_thanks_page_id')): get_site_url().'/' ;
-			
+			{
+				if($card)
+					$error_msg = __('Card payment failed. Your card has not been charged.', 'visma-pay-payment-gateway');
+				else
+					$error_msg = __('Payment was canceled or charge was not accepted.', 'visma-pay-payment-gateway');
+
+				switch ($cancel_url_option)
+				{
+					case 'order_pay':
+						do_action( 'woocommerce_set_cart_cookies',  true );
+						$redirect_url = $order->get_checkout_payment_url();
+						break;
+					case 'order_new_cart':
+						$redirect_url = wc_get_cart_url();
+						break;
+					case 'order_new_checkout':
+						$redirect_url = wc_get_checkout_url();
+						break;
+					default:
+						do_action( 'woocommerce_set_cart_cookies',  true );
+						$redirect_url = $this->get_return_url($order);
+						break;
+				}
+
+				wc_add_notice($error_msg, 'error');
+			}
+
 			return $redirect_url;
 		}
 
-		function visma_pay_settle_payment($order)
+		public function visma_pay_settle_payment($order)
 		{
-			$wc_order_id = $order->get_id();			
 			$settle_field = $order->get_meta('visma_pay_is_settled', true, 'edit');
-			$settle_check = empty($settle_field) && $settle_field == "0";
+			$settle_check = $order->get_payment_method() === 'visma_pay' && $settle_field === '0';
 
 			if(!$settle_check)
 				return;
 
-			$url = admin_url('post.php?post=' . absint( $wc_order_id ) . '&action=edit');
+			$url = $order->get_edit_order_url();
+			$settle_url = wp_nonce_url(
+				add_query_arg( 'visma_pay_settle', '1', $url ),
+				'visma_pay_settle',
+				'_vismapaysettle'
+			);
 
 			if(isset($_GET['visma_pay_settle']))
 			{
-				$order_number = $order->get_meta('visma_pay_order_number', true, 'edit');
-				$settlement_msg = '';
+				$check_nonce = wp_verify_nonce($_GET['_vismapaysettle'], 'visma_pay_settle');
 
-				if($this->process_settlement($order_number, $settlement_msg))
+				if($check_nonce)
 				{
-					$order->add_order_note(__('Payment settled.', 'visma-pay-payment-gateway'));
-					$order->update_meta_data('visma_pay_is_settled', 1);
-					$order->save();
-					$settlement_result = '1';
-				}
-				else
-					$settlement_result = '0';
+					$order_number = $order->get_meta('visma_pay_order_number', true, 'edit');
+					$settlement_msg = '';
 
-				if(!$settlement_result)
+					if($this->process_settlement($order_number, $settlement_msg))
+					{
+						$order->add_order_note(__('Payment settled.', 'visma-pay-payment-gateway'));
+						$order->update_meta_data('visma_pay_is_settled', 1);
+						$order->save();
+
+						echo '<div id="message" class="updated fade">' . esc_html($settlement_msg) . ' <p class="form-field"><a href="' . esc_url($url) . '" class="button button-primary">OK</a></p></div>';
+						return;
+					}
+
 					echo '<div id="message" class="error">' . esc_html($settlement_msg) . ' <p class="form-field"><a href="' . esc_url($url) . '" class="button button-primary">OK</a></p></div>';
-				else
-				{
-					echo '<div id="message" class="updated fade">' . esc_html($settlement_msg) . ' <p class="form-field"><a href="' . esc_url($url) . '" class="button button-primary">OK</a></p></div>';
 					return;
 				}
+
+				$this->logger->error('Visma Pay - invalid nonce on settle, order: ' . $order->get_id(), $this->logcontext);
 			}
 
-
 			$text = __('Settle payment', 'visma-pay-payment-gateway');
-			$url .= '&visma_pay_settle';
+
 			$html = '
 				<p class="form-field">
-					<a href="' . esc_url($url) . '" class="button button-primary">' . esc_html($text) . '</a>
+					<a href="' . esc_url($settle_url) . '" class="button button-primary">' . esc_html($text) . '</a>
 				</p>';
 
 			echo $html;
 		}
 
-		function process_settlement($order_number, &$settlement_msg)
+		private function process_settlement($order_number, &$settlement_msg)
 		{
-			include(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
+			require_once(plugin_dir_path( __FILE__ ).'includes/lib/visma_pay_loader.php');
 			$successful = false;
 			$payment = new Visma\VismaPay($this->api_key, $this->private_key);
 			try
@@ -1056,44 +1077,51 @@ function init_visma_pay_gateway()
 			return $successful;
 		}
 
-		function visma_pay_save_img($key, $img_url, $img_timestamp)
+		private function visma_pay_save_img($key, $img_url)
 		{
-			$img = 'assets/images/'.$key.'.png';
-			$timestamp = file_exists(plugin_dir_path( __FILE__ ) . $img) ? filemtime(plugin_dir_path( __FILE__ ) . $img) : 0;
+			$filename = sanitize_file_name($key);
+			$filename = wp_basename($filename);
 
-			try
-			{
-				if(!file_exists(plugin_dir_path( __FILE__ ) . $img) || $img_timestamp > $timestamp)
-				{
-					if($file = @fopen($img_url, 'r'))
-					{
-						if(class_exists('finfo'))
-						{
-							$finfo = new finfo(FILEINFO_MIME_TYPE);
-							if(strpos($finfo->buffer($file_content = stream_get_contents($file)), 'image') !== false)
-							{
-								@file_put_contents(plugin_dir_path( __FILE__ ) . $img, $file_content);
-								touch(plugin_dir_path( __FILE__ ) . $img, $img_timestamp);
-							}
-						}
-						else
-						{
-							@file_put_contents(plugin_dir_path( __FILE__ ) . $img, $file);
-							touch(plugin_dir_path( __FILE__ ) . $img, $img_timestamp);
-						}
-						@fclose($file);
-					}
-				}
-			}
-			catch (Exception $e)
-			{
-				$this->logger->error('Visma Pay - failed to save new img: ' . $e->getCode().' '.$e->getMessage(), $this->logcontext);
+			$relative_path = 'assets/images/' . $filename . '.png';
+			$full_path = plugin_dir_path( __FILE__ ) . $relative_path;
+
+			if (file_exists($full_path)) {
+				return $relative_path;
 			}
 
-			return $img;
+			if (parse_url($img_url, PHP_URL_HOST) !== parse_url($this->api_url, PHP_URL_HOST)) {
+				$this->logger->error('Visma Pay - image url domain mismatch: ' . $img_url, $this->logcontext);
+				return $relative_path;
+			}
+
+			$response = wp_remote_get($img_url, array(
+				'timeout' => 10,
+				'sslverify' => true,
+			));
+
+			if (is_wp_error($response)) {
+				$this->logger->error('Visma Pay - failed to download img: ' . $response->get_error_message(), $this->logcontext);
+				return $relative_path;
+			}
+
+			$response_code = wp_remote_retrieve_response_code($response);
+			$content_type  = wp_remote_retrieve_header($response, 'content-type');
+
+			if ($response_code !== 200 || strpos($content_type, 'image') === false) {
+				$this->logger->error('Visma Pay - invalid image response for ' . $key . ': ' . $response_code . ' (' . $content_type . ')', $this->logcontext);
+				return $relative_path;
+			}
+
+			$body = wp_remote_retrieve_body($response);
+
+			if ( ! @file_put_contents($full_path, $body) ) {
+				$this->logger->error('Visma Pay - failed to save img to ' . $full_path, $this->logcontext);
+			}
+
+			return $relative_path;
 		}
 
-		function visma_pay_translate_error_code($pbw_error_code)
+		private function visma_pay_translate_error_code($pbw_error_code)
 		{
 			switch ($pbw_error_code)
 			{
@@ -1116,7 +1144,7 @@ function init_visma_pay_gateway()
 			}
 		}
 
-		function visma_pay_translate_verified_code($pbw_verified_code)
+		private function visma_pay_translate_verified_code($pbw_verified_code)
 		{
 			switch ($pbw_verified_code)
 			{
@@ -1131,7 +1159,38 @@ function init_visma_pay_gateway()
 			}
 		}
 
-		function visma_pay_die($msg = '')
+		public function visma_pay_order_completed($order_id)
+		{
+			if($this->auto_capture === 'yes')
+			{
+				$order = wc_get_order($order_id);
+
+				$settle_field = $order->get_meta('visma_pay_is_settled', true, 'edit');
+				$settle_check = $order->get_payment_method() === 'visma_pay'
+					&& $order->get_status() === 'completed'
+					&& $settle_field === '0';
+
+				if(!$settle_check)
+					return;
+
+				$settlement_msg = '';
+				$order_number = $order->get_meta('visma_pay_order_number', true, 'edit');
+				$settle_result = $this->process_settlement($order_number, $settlement_msg);
+
+				if($settle_result)
+				{
+					$order->add_order_note(__('Payment captured automatically due to order status change.', 'visma-pay-payment-gateway'));
+					$order->update_meta_data('visma_pay_is_settled', 1);
+					$order->save();
+				}
+				else
+				{
+					$this->logger->error('Visma Pay - auto capture failed. Error: ' . $settlement_msg, $this->logcontext);
+				}
+			}
+		}
+
+		private function visma_pay_die($msg = '')
 		{
 			$this->logger->error('Visma Pay - return failed. Error: ' . $msg, $this->logcontext );
 			status_header(400);
