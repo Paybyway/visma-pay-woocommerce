@@ -3,12 +3,12 @@ Contributors: hsuvant
 Donate link:
 Tags: payment gateway, visma, pay, verkkomaksut, pankit, vismapay
 Requires at least: 3.3
-Tested up to: 6.9
+Tested up to: 7.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.3.0
-WC tested up to: 10.4.2
+WC tested up to: 10.8.1
 
 Visma Pay plugin for Woocommerce.
 
@@ -16,7 +16,7 @@ Visma Pay plugin for Woocommerce.
 
 Visma Pay plugin allows you to accept e-payments through most Finnish banks, credit cards, credit invoices and wallets. This plugin uses the Visma Pay Payment API.
 
-This is a plugin for integrating Visma Pay payment gateway with your Woocommerce store. To accept payments with this plugin, you need to have an active contract with [Visma Pay](https://www.visma.fi/vismapay/). You can order Visma Pay [here](https://www.visma.fi/vismapay/tilaa-visma-pay/) (see [terms](https://static.vismapay.com/terms/yleiset-ehdot.pdf)).
+This is a plugin for integrating Visma Pay payment gateway with your Woocommerce store. To accept payments with this plugin, you need to have an active contract with [Visma Pay](https://www.vismapay.fi). You can order Visma Pay [here](https://www.vismapay.fi/tilaa-visma-pay) (see [terms](https://static.vismapay.com/terms/yleiset-ehdot.pdf)).
 
 
 = Supported payment methods =
@@ -38,6 +38,10 @@ Nordea, Osuuspankki, Danskebank, Aktia, Säästöpankki, Paikallisosuuspankki, H
 
 
 == Changelog ==
+
+= 1.2.1 =
+* Updated 'tested up to' versions.
+* Updated Siirto logo
 
 = 1.2.0 =
 * Updated 'tested up to' versions.
