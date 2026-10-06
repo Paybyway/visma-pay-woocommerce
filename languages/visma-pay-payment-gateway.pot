@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Visma
+# Copyright (C) 2026 Visma
 # This file is distributed under the same license as the Visma Pay Payment Gateway plugin.
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-12-16T14:05:34+00:00\n"
+"POT-Creation-Date: 2026-05-20T11:51:52+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: visma-pay-payment-gateway\n"
@@ -36,7 +36,7 @@ msgstr ""
 
 #. Author URI of the plugin
 #: visma-pay-payment-gateway.php
-msgid "https://www.visma.fi/vismapay/"
+msgid "https://www.vismapay.fi"
 msgstr ""
 
 #: visma-pay-payment-gateway.php:81

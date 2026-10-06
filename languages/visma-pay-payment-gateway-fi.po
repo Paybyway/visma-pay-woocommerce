@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Visma Pay Payment Gateway\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/visma-pay-payment-"
 "gateway\n"
-"POT-Creation-Date: 2025-12-16T14:05:34+00:00\n"
-"PO-Revision-Date: 2025-12-16 16:08+0200\n"
+"POT-Creation-Date: 2026-05-20T11:51:52+00:00\n"
+"PO-Revision-Date: 2026-05-20 14:53+0300\n"
 "Last-Translator: \n"
 "Language-Team: Suomi\n"
 "Language: fi\n"
@@ -37,8 +37,8 @@ msgstr "Visma"
 
 #. Author URI of the plugin
 #: visma-pay-payment-gateway.php
-msgid "https://www.visma.fi/vismapay/"
-msgstr "https://www.visma.fi/vismapay/"
+msgid "https://www.vismapay.fi"
+msgstr "https://www.vismapay.fi"
 
 #: visma-pay-payment-gateway.php:81 visma-pay-payment-gateway.php:171
 msgid "Visma Pay"
@@ -506,6 +506,9 @@ msgid "Payment captured automatically due to order status change."
 msgstr ""
 "Maksu veloitettiin automaattisesti tilauksen päivittyessä \"Valmistunut\"-"
 "tilaan."
+
+#~ msgid "https://www.visma.fi/vismapay/"
+#~ msgstr "https://www.visma.fi/vismapay/"
 
 #~ msgid "Alisa Yrityslasku"
 #~ msgstr "Alisa Yrityslasku"

@@ -3,13 +3,13 @@
  * Plugin Name: Visma Pay Payment Gateway
  * Plugin URI: https://www.vismapay.com/docs
  * Description: Visma Pay Payment Gateway Integration for Woocommerce
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: Visma
  * Author URI: https://www.vismapay.fi
  * Text Domain: visma-pay-payment-gateway
  * Domain Path: /languages
  * WC requires at least: 3.3.0
- * WC tested up to: 10.8.1
+ * WC tested up to: 11.1.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -790,6 +790,12 @@ function init_visma_pay_gateway()
 		private function get_order_by_id_and_order_number($order_id, $order_number)
 		{
 			$order = wc_get_order($order_id);
+
+			if(!$order || empty($order_number))
+			{
+				return null;
+			}
+
 			$order_numbers = $order->get_meta('visma_pay_order_numbers', true, 'edit');
 
 			if(!$order_numbers)
@@ -816,6 +822,11 @@ function init_visma_pay_gateway()
 
 		public function check_visma_pay_response()
 		{
+			if(empty($this->private_key) || empty($this->api_key))
+			{
+				$this->visma_pay_die("Gateway not configured.");
+			}
+
 			if(count($_GET))
 			{
 				$return_code = isset($_GET['RETURN_CODE']) ? sanitize_text_field($_GET['RETURN_CODE']) : -999;
@@ -849,8 +860,9 @@ function init_visma_pay_gateway()
 					$this->visma_pay_die("Order not found.");
 
 				$wc_order_status = $order->get_status();
+				$result = null;
 
-				if($authcode_confirm === $authcode && $order)
+				if(hash_equals($authcode_confirm, (string)$authcode))
 				{
 					$current_return_code = $order->get_meta('visma_pay_return_code', true, 'edit');
 
@@ -890,6 +902,24 @@ function init_visma_pay_gateway()
 						{
 							$message = $e->getMessage();
 							$this->logger->error('Visma Pay REST::checkStatusWithOrderNumber failed, message: ' . $message, $this->logcontext );
+						}
+
+						$is_paid = $this->visma_pay_is_paid($result);
+
+						if($is_paid === null)
+						{
+							$this->logger->info('Visma Pay: payment status could not be confirmed, order not updated. Order: ' . $order->get_id(), $this->logcontext);
+							$this->visma_pay_redirect($return_code, $order, $result);
+						}
+
+						if($is_paid)
+						{
+							$return_code = 0;
+							$settled = isset($result->settled) ? $result->settled : $settled;
+						}
+						else if($return_code == 0)
+						{
+							$return_code = 1;
 						}
 
 						switch($return_code)
@@ -946,12 +976,36 @@ function init_visma_pay_gateway()
 				else
 					$this->visma_pay_die("MAC check failed");
 
-				$cancel_url_option = $this->get_option('cancel_url', '');
-				$card = (isset($result->source->object) && $result->source->object === 'card') ? true : false;
-				$redirect_url = $this->visma_pay_url($return_code, $order, $cancel_url_option, $card);
-				wp_redirect($redirect_url);
-				exit('Ok');
+				$this->visma_pay_redirect($return_code, $order, $result);
 			}
+		}
+
+		private function visma_pay_is_paid($result)
+		{
+			if(!isset($result->result))
+			{
+				return null;
+			}
+
+			switch((string)$result->result)
+			{
+				case '0':
+					return true;
+				case '2':
+				case '4':
+					return false;
+				default:
+					return null;
+			}
+		}
+
+		private function visma_pay_redirect($return_code, $order, $result)
+		{
+			$cancel_url_option = $this->get_option('cancel_url', '');
+			$card = isset($result->source->object) && $result->source->object === 'card';
+			$redirect_url = $this->visma_pay_url($return_code, $order, $cancel_url_option, $card);
+			wp_redirect($redirect_url);
+			exit('Ok');
 		}
 
 		private function visma_pay_url($return_code, $order, $cancel_url_option = '', $card = false)
@@ -1195,7 +1249,7 @@ function init_visma_pay_gateway()
 			$this->logger->error('Visma Pay - return failed. Error: ' . $msg, $this->logcontext );
 			status_header(400);
 			nocache_headers();
-			die($msg);
+			die('Payment return failed.');
 		}
 	}
 }
